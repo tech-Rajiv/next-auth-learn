@@ -10,7 +10,7 @@ export default async function Home() {
     redirect("/login");
   }
   return (
-    <div className="max-w-5xl mx-auto">
+    <div className="bg-gray-50 sm:p-5 p-3 min-h-screen">
       <Dashboard session={session} />
     </div>
   );

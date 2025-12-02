@@ -1,7 +1,17 @@
 import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
 
+type credPros = {
+  email: string | null | undefined;
+  password: string | undefined;
+};
 export const AUTH_OPTIONS = {
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -11,11 +21,9 @@ export const AUTH_OPTIONS = {
       async authorize(credentials, req) {
         console.log("credentials: ", credentials);
         const { email, password } = credentials;
-
         return {
           id: "01",
           name: "rajiv",
-          password,
           email,
         };
       },
