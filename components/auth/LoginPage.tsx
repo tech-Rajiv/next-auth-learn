@@ -43,7 +43,7 @@ export default function LoginPage() {
       <Button onClick={handleLogin}>Login</Button>
       <button
         onClick={() => signIn("google", { callbackUrl: "/" })}
-        className="underline cursor-pointer"
+        className="underline hover:text-blue-500 cursor-pointer"
       >
         Sign in with Google
       </button>
