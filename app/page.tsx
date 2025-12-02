@@ -1,10 +1,17 @@
-import Navbar from "@/components/Navbar";
-import Image from "next/image";
+import { getServerSession } from "next-auth";
+import { AUTH_OPTIONS } from "./lib/auth";
+import Dashboard from "@/components/Dashboard";
+import { redirect } from "next/navigation";
+import { sessionHelper } from "./lib/session";
 
-export default function Home() {
+export default async function Home() {
+  const session = await sessionHelper();
+  if (!session) {
+    redirect("/login");
+  }
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <Navbar />
+    <div className="max-w-5xl mx-auto">
+      <Dashboard session={session} />
     </div>
   );
 }

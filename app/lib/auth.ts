@@ -10,21 +10,22 @@ export const AUTH_OPTIONS = {
       },
       async authorize(credentials, req) {
         console.log("credentials: ", credentials);
+        const { email, password } = credentials;
+
         return {
           id: "01",
           name: "rajiv",
-          email: "rajiv@gmail.com",
+          password,
+          email,
         };
       },
     }),
   ],
   callbacks: {
     async session({ session, token }: any) {
-      console.log("token: ", token);
       if (session && session.user) {
         session.userId = token?.sub;
       }
-      console.log("session: ", session);
       return session;
     },
   },
