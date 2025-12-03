@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { signIn } from "next-auth/react";
 import { useState } from "react";
+import { Label } from "../ui/label";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -25,20 +26,28 @@ export default function LoginPage() {
           please signin with your email and password
         </p>
       </div>
-      <Input
-        type="text"
-        placeholder="username"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-
-      <Input
-        type="password"
-        placeholder="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        className=""
-      />
+      <div className="inp">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          type="text"
+          id="email"
+          placeholder="username"
+          value={email}
+          className="mt-2"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </div>
+      <div className="inp">
+        <Label htmlFor="password">Password</Label>
+        <Input
+          type="password"
+          id="password"
+          placeholder="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="mt-2"
+        />
+      </div>
 
       <Button onClick={handleLogin}>Login</Button>
       <button

@@ -1,10 +1,16 @@
+import { Account } from "next-auth";
+import { Session } from "next-auth";
+
+import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
-type credPros = {
-  email: string | null | undefined;
-  password: string | undefined;
-};
+declare module "next-auth" {
+  interface Session {
+    userId?: string;
+  }
+}
+
 export const AUTH_OPTIONS = {
   providers: [
     GoogleProvider({
@@ -15,12 +21,13 @@ export const AUTH_OPTIONS = {
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: { label: "email", type: "text", placeholder: "email" },
-        password: { label: "Password", type: "password" },
+        email: {},
+        password: {},
       },
       async authorize(credentials, req) {
-        console.log("credentials: ", credentials);
-        const { email, password } = credentials;
+        if (!credentials) return null;
+        // console.log("credentials: ", credentials);
+        const { email } = credentials;
         return {
           id: "01",
           name: "rajiv",
@@ -29,12 +36,26 @@ export const AUTH_OPTIONS = {
       },
     }),
   ],
+
+  pages: {
+    signIn: "/login",
+  },
   callbacks: {
-    async session({ session, token }: any) {
+    async session({ session, token }: { session: Session; token: JWT }) {
+      // console.log("token: ", token);
       if (session && session.user) {
         session.userId = token?.sub;
       }
       return session;
+    },
+    async jwt({ token, account }: { token: JWT; account: Account | null }) {
+      console.log("token, account: ", token, account);
+      if (account) {
+        token.access_token = account.access_token;
+        token.refresh_token = account.refresh_token;
+        token.expires_at = account.expires_at;
+      }
+      return token;
     },
   },
 };

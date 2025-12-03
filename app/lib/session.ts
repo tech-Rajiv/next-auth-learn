@@ -4,7 +4,6 @@ import { AUTH_OPTIONS } from "./auth";
 
 export const sessionHelper = async () => {
   const sessionData = await getServerSession(AUTH_OPTIONS);
-  console.log("sessionData : ", sessionData);
   if (sessionData) {
     return sessionData;
   }
