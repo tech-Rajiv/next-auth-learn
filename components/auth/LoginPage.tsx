@@ -9,8 +9,9 @@ import { Label } from "../ui/label";
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [loading, setLoading] = useState(false);
   async function handleLogin() {
+    setLoading(true);
     await signIn("credentials", {
       email,
       password,
@@ -19,10 +20,10 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex flex-col gap-3 p-5 bg-white max-w-md mx-auto shadow rounded-xl">
+    <div className="flex flex-col gap-4 p-5 sm:p-8 bg-white max-w-md mx-auto shadow rounded-xl">
       <div className="head">
-        <h2 className="font-semibold text-lg text-center">SignIn</h2>
-        <p className="mb-3 mt-2 text-center">
+        <h2 className="font-semibold text-xl mb-1 text-center">SignIn</h2>
+        <p className="mb-3 text-gray-600 text-center">
           please signin with your email and password
         </p>
       </div>
@@ -49,13 +50,17 @@ export default function LoginPage() {
         />
       </div>
 
-      <Button onClick={handleLogin}>Login</Button>
-      <button
-        onClick={() => signIn("google", { callbackUrl: "/" })}
-        className="underline hover:text-blue-500 cursor-pointer"
-      >
-        Sign in with Google
-      </button>
+      <Button disabled={loading} onClick={handleLogin}>
+        {loading ? "please wait..." : "Sign In"}
+      </Button>
+      <div className="links text-center">
+        <button
+          onClick={() => signIn("google", { callbackUrl: "/" })}
+          className="underline hover:text-blue-600 cursor-pointer"
+        >
+          Sign in with Google
+        </button>
+      </div>
     </div>
   );
 }
