@@ -41,13 +41,23 @@ export const AUTH_OPTIONS = {
     signIn: "/login",
   },
   callbacks: {
-    async jwt({ token, account }: { token: JWT; account: Account }) {
-      console.log("token, account: ", token, account); //account: is used for only google or github type login, providers gives account access, which has accessstoken etc eg google
-      if (account) {
+    async jwt({ token, user, account }: { token: JWT; account: Account }) {
+      if (user && !account) {
+        token.userId = user.id; // manual user ID
+        token.loginType = "credentials"; // optional but useful
+      }
+
+      // -----------------------------------
+      // Case 2: FIRST LOGIN (Google)
+      // -----------------------------------
+      if (account && account.type === "oauth") {
+        token.userId = account.providerAccountId; // google user id
         token.access_token = account.access_token;
         token.refresh_token = account.refresh_token;
         token.expires_at = account.expires_at;
+        token.loginType = "google";
       }
+
       return token;
     },
     async session({ session, token }: { session: Session; token: JWT }) {
